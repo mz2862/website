@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>DataAnalysis</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+  </head>
+  <body>
+    
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">NYC Incident Analysis</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  <div class="navbar-nav">
+    <div class="nav-item text-nowrap">
+      <a class="nav-link px-3" href="#">Sign out</a>
+    </div>
+  </div>
+</header>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <span data-feather="bar-chart-2"></span>
+                Data Summary
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/shootingByMap">
+              <span data-feather="home"></span>
+              Shooting Map
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="/shootingByBoro">
+              <span data-feather="file"></span>
+              Shooting By Boroughs
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link active" href="/shootingByMonth">
+              <span data-feather="shopping-cart"></span>
+              Shooting By Month
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/arrestByBoro">
+              <span data-feather="users"></span>
+              Arrest By Boro
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/arrestByMonth">
+              <span data-feather="bar-chart-2"></span>
+                Arrest By Month
+            </a>
+          </li>
+
+            <li class="nav-item">
+            <a class="nav-link" href="/arrestBySex">
+              <span data-feather="bar-chart-2"></span>
+                Arrest By Sex
+            </a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="/arrestByRace">
+              <span data-feather="bar-chart-2"></span>
+                Arrest By Race
+            </a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="/arrestByAgeGroup">
+              <span data-feather="bar-chart-2"></span>
+                Arrest By Group
+            </a>
+          </li>
+        </ul>
+
+
+      </div>
+    </nav>
+
+    <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4" id="chart">
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">shooting By month </h1>from {{ start_date }} to {{ end_date }}
+      </div>
+
+<!-- Create an element where the map will take place -->
+        <div class="chart-container" style="position: relative; margin: auto;height: 80vh;width: 80vw;">
+
+                <canvas id="myChart"></canvas>
+
+        </div>
+
+    </main>
+  </div>
+</div>
+<script src="/static/js/Chart.min.js"></script>
+  <script>
+        const ctx = document.getElementById('myChart');
+
+
+
+        const data = {
+          labels: {{ labels | tojson }},
+          datasets: [{
+            label: 'Shooting Incidents By month',
+            data: {{ data | tojson }},
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+          }]
+        };
+
+        const config = {
+              type: 'line',
+              data: data,
+              options: {
+                  responsive:true,
+                animations: {
+                  tension: {
+                    duration: 1000,
+                    easing: 'linear',
+                    from: 1,
+                    to: 0,
+                    loop: true
+                  }
+                },
+                scales: {
+                  y: { // defining min and max so hiding the dataset does not change scale range
+                    min: 50,
+                    max: 200
+                  }
+                }
+              }
+        };
+
+        const myChart = new Chart(ctx, config);
+
+</script>
+
+
+  </body>
+</html>
